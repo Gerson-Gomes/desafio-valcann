@@ -7,7 +7,7 @@ import { getRoverCameras } from "@/lib/api";
 
 const ROVERS = ["Curiosity", "Opportunity", "Spirit"];
 
-const CURIOSITYCAMERAS = ["FHAZ", "RHAZ", "MAST", "CHEMCAM", "MAHLI", "MARDI", "NAVCAM"];
+const CURIOSITYCAMERAS = ["FHAZ", "RHAZ", "MAST", "CHEMCAM", "MAHLI", "MARDI", "NAVCAM","MAST_LEFT","CHEMCAM_RMI","NAV_RIGHT_B","NAV_LEFT_B","FHAZ_LEFT_B","FHAZ_RIGHT_B","RHAZ_LEFT_B","RHAZ_RIGHT_B","MAST_RIGHT"];
 const OPPORTUNITYCAMERAS = ["FHAZ", "RHAZ", "NAVCAM", "PANCAM", "MINITES"];
 const SPIRITCAMERAS = ["FHAZ", "RHAZ", "NAVCAM", "PANCAM", "MINITES"];
 
@@ -17,6 +17,7 @@ export default function SearchForm({ onSubmit }) {
   const [date, setDate] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [errorRover, setErrorRover] = useState(false);
+  const [errorDate, setErrorDate] = useState(false);
 
   // clear the rover error as soon as the user types a valid rover
   useEffect(() => {
@@ -49,6 +50,15 @@ export default function SearchForm({ onSubmit }) {
       return;
     }
     setErrorRover(false);
+
+
+    // validate date
+    if (!date) {
+      setErrorDate(true);
+      setShowModal(false); // Fecha modal se input de data for invalido
+      return;
+    }
+    setErrorDate(false);
 
     const cameraParam = camera && camera !== "" ? camera : undefined;
     const dateParam = date && date !== "" ? date : undefined;
@@ -101,8 +111,9 @@ export default function SearchForm({ onSubmit }) {
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="w-fit h-[3rem] p-2 text-gray-700 bg-sky-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={`w-fit h-[3rem] p-2 text-gray-700 bg-sky-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errorDate ? "border-2 border-red-500" : ""}`}
         />
+        <p className="text-red-400">{errorDate ? "Data obrigatoria" : ""}</p>
       </div>
 
       <div className="flex gap-4 items-center">

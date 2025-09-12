@@ -44,15 +44,21 @@ export async function getRoverCameras(
   if (!roverName) throw new Error("Rover name is required");
   if (!api_key) throw new Error("API key is required");
 
+  // Build params: NOTE we intentionally do NOT add `camera` param (Option B)
   const params = new URLSearchParams({ api_key });
-
-  if (cameraName) params.append("camera", cameraName);
-  if (earthDate) params.append("earth_date", earthDate);
+  if (earthDate) {
+    params.append("earth_date", earthDate);
+  } else {
+    // fallback to a sol if no earth date provided (you can change the sol value)
+    params.append("earth_date", "2015-05-30");
+  }
   if (page) params.append("page", String(page));
 
   const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/${encodeURIComponent(
-    roverName
+    roverName.toLowerCase()
   )}/photos?${params.toString()}`;
+  console.log(url);
+  
 
   try {
     const response = await fetch(url);
@@ -60,9 +66,24 @@ export async function getRoverCameras(
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return Array.isArray(data.photos) ? data.photos : [];
+    const photos = Array.isArray(data.photos) ? data.photos : [];
+
+    // If no camera filter requested, return everything
+    if (!cameraName) return photos;
+
+    // Filter client-side: match variants that start with the cameraName (case-insensitive)
+    const needle = String(cameraName).toLowerCase();
+    const filtered = photos.filter(
+      (p) =>
+        p &&
+        p.camera &&
+        typeof p.camera.name === "string" &&
+        p.camera.name.toLowerCase().startsWith(needle)
+    );
+
+    return filtered;
   } catch (error) {
-    console.error("Error fetching Mars photos by camera:", error);
+    console.error("Error fetching Mars photos by camera (client-filter):", error);
     return [];
   }
 }

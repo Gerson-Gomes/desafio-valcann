@@ -57,7 +57,7 @@ export async function getRoverCameras(
   const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/${encodeURIComponent(
     roverName.toLowerCase()
   )}/photos?${params.toString()}`;
-  console.log(url);
+ 
   
 
   try {

@@ -23,4 +23,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  height: 100dvh;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><circle cx="30" cy="40" r="2" fill="white"/><circle cx="150" cy="90" r="1.5" fill="white"/><circle cx="100" cy="150" r="2.2" fill="white"/><circle cx="50" cy="70" r="1.8" fill="white"/></svg>') repeat;
+  background-color: #141129;
 }

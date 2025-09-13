@@ -94,6 +94,14 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
         };
     }, [photos, rover, camera, date, page, apiKey]);
 
+    function converterData(iso) {
+        if (!iso || typeof iso !== "string") return "";
+        const parts = iso.split("-");
+        if (parts.length !== 3) return iso; // fallback
+        const [yyyy, mm, dd] = parts;
+        return `${dd}-${mm}-${yyyy}`;
+    }
+
 
 
 
@@ -101,8 +109,9 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
     return (
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5/6 h-5/6 bg-white rounded-sm bg-opacity-90 flex flex-col z-50 p-4 overflow-auto">
             <button
-                className="text-white absolute right-2 top-2 px-3 py-1 rounded bg-red-600 hover:bg-red-700"
+                className="text-white absolute right-2 top-2 px-3 py-1 rounded bg-red-600 hover:bg-red-700 cursor-pointer"
                 onClick={onclose}
+
             >
                 X
             </button>
@@ -136,7 +145,7 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
                                 <div className="p-2 text-sm text-gray-700">
                                     <div><strong>Rover:</strong> {p.rover.name}</div>
                                     <div><strong>Camera:</strong> {p.camera?.full_name || p.camera?.name}</div>
-                                    <div><strong>Earth date:</strong> {p.earth_date}</div>
+                                    <div><strong>Data da foto:</strong> {converterData(p.earth_date)}</div>
                                 </div>
                             </div>
                         ))}
@@ -148,9 +157,9 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
                         <button
                             disabled={page === 1 || loading}
                             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                            className="text-stone-950 px-4 py-2 bg-blue-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="text-stone-950 px-4 py-2 bg-blue-600 rounded disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:bg-blue-800"
                         >
-                            Previous
+                            Anterior
                         </button>
 
                         <div className="flex items-center gap-3">
@@ -158,19 +167,19 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
                                 className="text-stone-950 px-4 py-2 bg-blue-600 rounded cursor-default"
                                 disabled
                             >
-                                Page {page}
+                                Pagina {page}
                             </button>
 
-                            
+
                             {checkingNext && <span className="text-sm text-gray-500">checking next…</span>}
                         </div>
 
                         <button
                             onClick={() => setPage((prev) => prev + 1)}
                             disabled={loading || checkingNext || !hasNext}
-                            className="text-stone-950 px-4 py-2 bg-blue-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="text-stone-950 px-4 py-2 bg-blue-600 rounded disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:bg-blue-800"
                         >
-                            Next
+                            Próximo
                         </button>
                     </div>
                 </>

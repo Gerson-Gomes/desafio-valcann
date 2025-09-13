@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# VALCANN Frontend — Projeto (Processo Seletivo)
 
-## Getting Started
+**Descrição curta**
 
-First, run the development server:
+Este repositório contém a aplicação web desenvolvida para o **Processo Seletivo de Estágio Frontend da VALCANN**. A aplicação consome a API pública da NASA para recuperar e exibir fotos capturadas por rovers (por exemplo: Curiosity, Opportunity, Spirit).
+
+---
+
+## Funcionalidades
+
+- Consulta à API pública da NASA para recuperar fotos de rovers.
+- Exibição em galeria/lista com informações (data, rover, câmera).
+- Configuração por variáveis de ambiente para manter a chave de API privada.
+
+---
+
+## Requisitos
+
+- Node.js (versão LTS recomendada)
+- npm ou yarn
+- Chave de API da NASA (gratuita)
+
+---
+
+## Como obter a chave da NASA
+
+1. Acesse: https://api.nasa.gov
+2. Cadastre-se (ou faça login) e solicite uma **API Key** gratuita.
+3. Adicione a chave recebida no arquivo `.env.local` (na raiz do projeto) antes de rodar a aplicação.
+
+---
+
+## Configuração (passo a passo)
+
+1. Clone o repositório:
+
+```bash
+git clone <url-do-repositorio>
+cd <nome-do-repositorio>
+```
+
+2. Instale dependências:
+
+```bash
+npm install
+# ou
+yarn
+```
+
+3. Crie o arquivo `.env.local` na raiz do projeto com sua chave da NASA. Exemplo:
+
+```
+NEXT_PUBLIC_NASA_API_KEY=SuaChaveAqui
+# Opcional (para uso em chamadas server-side):
+NASA_API_KEY=SuaChaveAqui
+```
+
+> **Importante:** mantenha `.env.local` listado no `.gitignore` para não expor sua chave.
+
+4. Execute em modo de desenvolvimento:
 
 ```bash
 npm run dev
-# or
+# ou
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Build para produção:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Estrutura do projeto (resumo)
 
-To learn more about Next.js, take a look at the following resources:
+- `src/` — código-fonte (componentes, hooks, páginas)
+- `public/` — ativos públicos (imagens, favicon)
+- `styles/` — estilos globais / utilitários CSS
+- `README.md` — este arquivo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Use a estrutura do framework escolhido (por exemplo Next.js com `app/` ou `pages/`).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Como a aplicação funciona (resumo técnico)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+A aplicação consome o endpoint de **Photos** da API da NASA para rovers, enviando a chave via variável de ambiente. A resposta inclui metadados e URLs das imagens, que são renderizados no frontend em uma galeria responsiva. Para chamadas que não devem expor a chave no cliente, use variáveis sem o prefixo `NEXT_PUBLIC_` em funções server-side.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Observações finais
+
+- Projeto desenvolvido para o processo seletivo da **VALCANN**.
+- Usuários que clonarem o repositório precisam criar o arquivo `.env.local` com sua própria chave da NASA para executar a aplicação localmente.
+- Sinta-se à vontade para adicionar screenshots, link de preview ou notas técnicas adicionais.
+
+---
+
+**Autor:** Gerson de Castro Gomes
+
+> Se quiser, eu já adiciono o seu nome e o link de pré-visualização diretamente no README — diga o nome e o link que eu insiro.
+

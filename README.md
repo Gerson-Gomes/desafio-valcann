@@ -101,5 +101,5 @@ A aplicação consome o endpoint de **Photos** da API da NASA para rovers, envia
 
 **Autor:** Gerson de Castro Gomes
 
-> Se quiser, eu já adiciono o seu nome e o link de pré-visualização diretamente no README — diga o nome e o link que eu insiro.
+
 

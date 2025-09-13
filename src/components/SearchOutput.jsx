@@ -7,13 +7,13 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
-
-    // whether there is at least one photo on page+1
     const [hasNext, setHasNext] = useState(false);
     const [checkingNext, setCheckingNext] = useState(false);
 
     const apiKey = process.env.NEXT_PUBLIC_NASA_API_KEY;
 
+
+    //processo de montagem do modal de busca
     useEffect(() => {
         if (!rover) {
             setPhotos([]);
@@ -32,7 +32,7 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
             return;
         }
 
-        // fetch current page
+        // Renderiza a primeira pagina de fotos
         getRoverCameras(rover, apiKey, camera || undefined, date || undefined, page)
             .then((res) => {
                 if (!mounted) return;
@@ -53,16 +53,13 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
         };
     }, [rover, camera, date, page, apiKey]);
 
-    // check if next page exists (only when we might have a next page)
+    // Verifica se há mais uma pagina de objetos (25 objetos por pagina)
     useEffect(() => {
         if (!rover || !date) {
             setHasNext(false);
             return;
         }
 
-        // If current photos are less than 25, there's no next page
-        // (NASA returns up to 25 results per page). But if current length === 25
-        // we must check page+1 to be sure.
         if (photos.length < 25) {
             setHasNext(false);
             return;
@@ -84,7 +81,6 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
                 setHasNext(Array.isArray(next) && next.length > 0);
             } catch (err) {
                 if (!mounted) return;
-                // on error, assume no next (safer) and optionally log
                 console.error("Error checking next page:", err);
                 setHasNext(false);
             } finally {
@@ -98,6 +94,10 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
         };
     }, [photos, rover, camera, date, page, apiKey]);
 
+
+
+
+    //Modal de Busca
     return (
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5/6 h-5/6 bg-white rounded-sm bg-opacity-90 flex flex-col z-50 p-4 overflow-auto">
             <button
@@ -107,20 +107,21 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
                 X
             </button>
 
-            <h3 className="text-black text-xl font-semibold mb-3">Results for {rover}</h3>
+            <h3 className="text-black text-xl font-semibold mb-3">Buscando fotos para o: {rover}</h3>
 
-            {loading && <div className="text-black">Loading photos…</div>}
-            {error && <div className="text-red-600">Error: {error}</div>}
+            {loading && <div className="text-black">Carregando…</div>}
+            {error && <div className="text-red-600">Erro: {error}</div>}
 
             {!loading && !error && photos.length === 0 && (
-                <div className="text-black">No photos found for this query.</div>
+                <div className="text-black">A busca retornou nenhuma foto, tente mudar os padrões de busca</div>
             )}
 
             {!loading && photos.length > 0 && (
+                //Grid de objetos retornados pela busca de api
                 <>
                     <div className="justify-items-center grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                         {photos.map((p) => (
-                            <div key={p.id} className="max-w-90 bg-white rounded shadow overflow-hidden">
+                            <div key={p.id} className="w-4/5 bg-white rounded shadow overflow-hidden">
                                 <a href={p.img_src} target="_blank" rel="noreferrer">
                                     <img
                                         src={p.img_src}
@@ -141,33 +142,33 @@ export default function SearchOutput({ onclose, rover, camera, date }) {
                         ))}
                     </div>
 
-                    {/* Pagination Controls */}
-                    {/* Show pagination controls when there's a chance of multiple pages */}
+                    {/* Controle de Paginação */}
+                    {/* Mostra navegação de paginas*/}
                     <div className="flex justify-center items-center gap-4 mt-6">
                         <button
                             disabled={page === 1 || loading}
                             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="text-stone-950 px-4 py-2 bg-blue-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Previous
                         </button>
 
                         <div className="flex items-center gap-3">
                             <button
-                                className="px-4 py-2 bg-gray-100 rounded cursor-default"
+                                className="text-stone-950 px-4 py-2 bg-blue-600 rounded cursor-default"
                                 disabled
                             >
                                 Page {page}
                             </button>
 
-                            {/* show small spinner/text while checking next */}
+                            
                             {checkingNext && <span className="text-sm text-gray-500">checking next…</span>}
                         </div>
 
                         <button
                             onClick={() => setPage((prev) => prev + 1)}
                             disabled={loading || checkingNext || !hasNext}
-                            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="text-stone-950 px-4 py-2 bg-blue-600 rounded disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Next
                         </button>

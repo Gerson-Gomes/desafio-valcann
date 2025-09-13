@@ -102,7 +102,7 @@ export async function getPhotos(apiKey, rover = "curiosity", date = null) {
   return data.photos ?? [];
 }
 
-const apiKey = process.env.NEXT_PUBLIC_NASA_API_KEY
+const apiKey = process.env.NEXT_PUBLIC_NASA_API_KEY || "DEMO_KEY";
 getFrontPhotos(apiKey).then(photos => {
   
 });

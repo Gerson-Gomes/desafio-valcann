@@ -44,7 +44,11 @@ export default function AutoComplete({
     }
   })();
 
-  // ordenação de lista
+  // Inicio da logica de ordenação dos inputs
+
+ 
+
+  //Algoritimo de levenshtein para lidar com nomes distintos de cameras ex:FHAZ e FHAZ_LEFT_B
   function levenshtein(a = "", b = "") {
     a = a.split("");
     b = b.split("");
@@ -115,7 +119,11 @@ export default function AutoComplete({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, open, resolvedOptions.length]);
+  // Fim da logica de input
 
+
+
+  //Garante que o usuario escolheu uma das opções pré-selecionadas
   const validateAndClose = () => {
     const match = resolvedOptions.find(o => o.toLowerCase() === (query ?? "").trim().toLowerCase());
     if (!match && !optional) {
@@ -140,6 +148,9 @@ export default function AutoComplete({
     // activeIndex será atualizado pelo useEffect que observa `query`
   };
 
+
+
+  //Elemtento de input usado para o input do Rover e da Camera
   return (
     <div className="relative w-full" ref={containerRef}>
       <input

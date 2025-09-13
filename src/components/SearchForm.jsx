@@ -19,14 +19,13 @@ export default function SearchForm({ onSubmit }) {
   const [errorRover, setErrorRover] = useState(false);
   const [errorDate, setErrorDate] = useState(false);
 
-  // clear the rover error as soon as the user types a valid rover
+  // Logica para garantir o input de um rover valido
   useEffect(() => {
     if (rover && ROVERS.includes(rover)) {
       setErrorRover(false);
     }
   }, [rover]);
 
-  // keep existing behavior of clearing camera when rover changes
   useEffect(() => {
     if (camera) {
       setCamera("");
@@ -41,9 +40,9 @@ export default function SearchForm({ onSubmit }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiKey = process.env.NASA_API_KEY;
+    const apiKey = process.env.NASA_API_KEY || "DEMO_KEY";
 
-    // validate rover
+    //Garante que o submit não funcione sem um valor de rover
     if (!rover || !ROVERS.includes(rover)) {
       setErrorRover(true);
       setShowModal(false); // Fecha modal se input de rover for invalido
@@ -52,7 +51,7 @@ export default function SearchForm({ onSubmit }) {
     setErrorRover(false);
 
 
-    // validate date
+    // logica de validação da data
     if (!date) {
       setErrorDate(true);
       setShowModal(false); // Fecha modal se input de data for invalido
@@ -76,8 +75,10 @@ export default function SearchForm({ onSubmit }) {
   };
 
   return (
+    // Formulario de busca
     <form onSubmit={handleSubmit} className="w-full max-w-3xl">
       <div className="flex justify-between gap-4">
+        {/*Campo de inserção de rovers*/}
         <div className="mb-6 w-2/5">
           <label className="block w-full mb-2 font-medium text-sky-100">Rover</label>
           <AutoComplete
@@ -92,6 +93,7 @@ export default function SearchForm({ onSubmit }) {
           />
           <p className="text-red-400">{errorRover ? "Rover inválido" : ""}</p>
         </div>
+        {/*Campo de inserção das cameras (Opicional)*/}
         <div className="mb-6 w-3/5">
           <label className="block w-full mb-2 font-medium text-sky-100">Camera</label>
           <AutoComplete
@@ -104,7 +106,7 @@ export default function SearchForm({ onSubmit }) {
           />
         </div>
       </div>
-
+      {/*Campo de inserção da data*/}
       <div className="mb-6">
         <label className="block mb-2 font-medium">Date</label>
         <input
@@ -117,6 +119,7 @@ export default function SearchForm({ onSubmit }) {
       </div>
 
       <div className="flex gap-4 items-center">
+        {/*Botão de pesquisa*/}
 
         <button
           type="submit"
